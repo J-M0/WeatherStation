@@ -14,11 +14,22 @@ static const char ntpServerName[] = "us.pool.ntp.org";
 //const int timeZone = -5;  // Eastern Standard Time (USA)
 const int timeZone = -4;  // Eastern Daylight Time (USA)
 
+const int NTP_PACKET_SIZE = 48; // NTP time is in the first 48 bytes of message
+byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
+
 time_t getNtpTime();
 void sendNTPpacket(IPAddress &address);
 
-const int NTP_PACKET_SIZE = 48; // NTP time is in the first 48 bytes of message
-byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
+void startNTP() {
+  Serial.println("Starting UDP");
+  Udp.begin(localPort);
+  Serial.print("Local port: ");
+  Serial.println(Udp.localPort());
+  Serial.println("waiting for time sync");
+  setSyncProvider(getNtpTime);
+  setSyncInterval(300);
+}
+
 
 time_t getNtpTime() {
   IPAddress ntpServerIP; // NTP server's ip address

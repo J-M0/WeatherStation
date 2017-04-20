@@ -1,12 +1,9 @@
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
 #include <Temboo.h>
 #include <BlynkSimpleEsp8266.h>
 #include "TimeCode.h"
 
 void setup() {
-  // put your setup code here, to run once:
-
+  startNTP();
 }
 
 void loop() {
