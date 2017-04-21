@@ -3,6 +3,7 @@
 
 void setup() {
   startNTP();
+  startWiFi();
 }
 
 void loop() {
