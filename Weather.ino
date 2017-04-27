@@ -1,15 +1,21 @@
 #include <Wire.h>
 #include <SparkFunT5403.h>
-// Barometer code reused from example https://github.com/sparkfun/SparkFun_T5403_Barometric_Sensor_Arduino_Library/blob/master/examples/SparkFun_T5403_example/SparkFun_T5403_example.ino
 
+/* Si7021 Humidity and Temperature Sensor */
+// https://github.com/sparkfun/Si7021_Breakout/tree/master/Libraries/Arduino/Si7021
+
+int polling_interval = 10; //Seconds to wait between polling
+
+float humidity = 0;
+float tempf = 0;
+Weather tempHumidSensor;
 
 /* Barometer Variables */
+// Barometer code reused from example https://github.com/sparkfun/SparkFun_T5403_Barometric_Sensor_Arduino_Library/blob/master/examples/SparkFun_T5403_example/SparkFun_T5403_example.ino
 bool barometerConnected = false;
 T5403 barometer(MODE_I2C);
-Ticker barometerTick;
 float bar_temperature_c, bar_temperature_f;
 double pressure_abs, pressure_relative, altitude_delta, pressure_baseline;
-
 double base_altitude = 62; //Altitude in meters
 
 void startWeather() {
@@ -21,11 +27,27 @@ void startWeather() {
     barometer.begin();
     // Grab a baseline pressure for delta altitude calculation.
     pressure_baseline = barometer.getPressure(MODE_ULTRA);
-    barometerTick.attach(10, barometerUpdate);
+    barometerUpdate();
+    timer.setInterval(polling_interval * 1000, barometerUpdate);
   }
 
   //Setup temperature and humidity sensor
+  tempHumidSensor.begin();
+  tempHumidUpdate();
+  timer.setInterval(polling_interval * 1000, tempHumidUpdate);
   
+}
+
+void tempHumidUpdate() {
+  humidity = tempHumidSensor.getRH();
+  tempf = tempHumidSensor.getTempF();
+//  Serial.print("Si7021 temp: ");
+//  Serial.print(tempf);
+//  Serial.print("F, ");
+//
+//  Serial.print("humidity: ");
+//  Serial.print(humidity);
+//  Serial.println("%");
 }
 
 void barometerUpdate() {
@@ -80,6 +102,7 @@ void checkForBarometer() {
   Wire.beginTransmission (b);
   if (Wire.endTransmission () == 0) {
     barometerConnected = true;
+    Serial.println();
     Serial.println("Barometer attached");
   }
   delay (5);  // give devices time to recover
