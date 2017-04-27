@@ -4,6 +4,7 @@
 #include "SparkFun_Si7021_Breakout_Library.h"
 #include <Wire.h>
 #include <SimpleTimer.h>
+#include <Ticker.h>
 
 float humidity = 0;
 float tempf = 0;
@@ -18,6 +19,7 @@ void setup() {
 //  startNTP();
 //  Blynk.config(BLYNK_AUTH);
   sensor.begin();
+  startWeather();
   updateIndoor();
   timer.setInterval(5 * 1000, updateIndoor);
 }
@@ -30,7 +32,7 @@ void loop() {
 void updateIndoor() {
   tempf = sensor.getTempF();
   humidity = sensor.getRH();
-  
+
   Serial.print("Indoor temp: ");
   Serial.print(tempf);
   Serial.print("F, ");
@@ -44,7 +46,7 @@ void updateIndoor() {
 void updateOutdoor() {
   tempf = sensor.getTempF();
   humidity = sensor.getRH();
-  
+
   Serial.print("Outdoor temp: ");
   Serial.print(tempf);
   Serial.print("F, ");
@@ -54,4 +56,3 @@ void updateOutdoor() {
   Serial.println("%");
   Blynk.virtualWrite(V0, tempf);
 }
-

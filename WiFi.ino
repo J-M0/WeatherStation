@@ -7,7 +7,7 @@ const char* pass = "";
 void startWiFi() {
   // Initialize WiFi connection
   WiFi.begin(ssid, pass); //connecting to the router
-  Serial.print("Connecting");
+  Serial.print("Connecting WiFi");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
