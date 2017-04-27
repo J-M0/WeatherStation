@@ -5,10 +5,6 @@
 #include <Wire.h>
 #include <SimpleTimer.h>
 
-
-
-#define BLYNK_PRINT Serial
-
 float humidity = 0;
 float tempf = 0;
 
@@ -43,5 +39,19 @@ void updateIndoor() {
   Serial.print(humidity);
   Serial.println("%");
   Blynk.virtualWrite(V1, tempf);
+}
+
+void updateOutdoor() {
+  tempf = sensor.getTempF();
+  humidity = sensor.getRH();
+  
+  Serial.print("Outdoor temp: ");
+  Serial.print(tempf);
+  Serial.print("F, ");
+
+  Serial.print("Outdoor humidity: ");
+  Serial.print(humidity);
+  Serial.println("%");
+  Blynk.virtualWrite(V0, tempf);
 }
 
