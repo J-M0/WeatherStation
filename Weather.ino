@@ -38,6 +38,24 @@ void startWeather() {
   
 }
 
+String getWeatherJSON() {
+  String json = "{\"humidity\": \"" + String(humidity) + "\", ";
+  json = json + "\"temp\": \"" + String(tempf) + "\", ";
+  if (barometerConnected) {
+    json = json + "\"indoors\": false, ";
+    json = json + "\"relative_pressure\": " + String(pressure_relative) +"\"";
+  }
+  else {
+    json = json + "\"indoors\": true";
+  }
+  json = json + "}";
+  return json;
+}
+
+void printWeatherJSON() {
+  Serial.println(getWeatherJSON());
+}
+
 void tempHumidUpdate() {
   humidity = tempHumidSensor.getRH();
   tempf = tempHumidSensor.getTempF();

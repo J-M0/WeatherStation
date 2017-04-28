@@ -13,6 +13,7 @@ void setup() {
 //  startNTP();
 //  Blynk.config(BLYNK_AUTH);
   startWeather();
+  timer.setInterval(10* 1000, printWeatherJSON);
 }
 
 void loop() {
