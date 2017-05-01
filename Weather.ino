@@ -4,7 +4,7 @@
 /* Si7021 Humidity and Temperature Sensor */
 // https://github.com/sparkfun/Si7021_Breakout/tree/master/Libraries/Arduino/Si7021
 
-int polling_interval = 10; //Seconds to wait between polling
+const int polling_interval = 10; //Seconds to wait between polling
 
 float humidity = 0;
 float tempf = 0;
@@ -18,32 +18,46 @@ float bar_temperature_c, bar_temperature_f;
 double pressure_abs, pressure_relative, altitude_delta, pressure_baseline;
 double base_altitude = 62; //Altitude in meters
 
+void sendWeatherInfo() {
+	if(barometerConnected) {
+		Blynk.virtualWrite(V0, tempf);
+    Blynk.virtualWrite(V2, humidity);
+    Blynk.virtualWrite(V4, pressure_relative);
+	} else {
+    Blynk.virtualWrite(V1, tempf);
+    Blynk.virtualWrite(V3, humidity);
+	}
+}
+
 void startWeather() {
   checkForBarometer();
 
   // Setup Barometer if it is connected
-  if (barometerConnected) { 
+  if (barometerConnected) {
     //Retrieve calibration constants for conversion math.
     barometer.begin();
     // Grab a baseline pressure for delta altitude calculation.
     pressure_baseline = barometer.getPressure(MODE_ULTRA);
     barometerUpdate();
-    timer.setInterval(polling_interval * 1000, barometerUpdate);
+//    timer.setInterval(polling_interval * 1000, barometerUpdate);
   }
 
   //Setup temperature and humidity sensor
   tempHumidSensor.begin();
   tempHumidUpdate();
-  timer.setInterval(polling_interval * 1000, tempHumidUpdate);
-  
+//  timer.setInterval(polling_interval * 1000, tempHumidUpdate);
+
 }
 
 String getWeatherJSON() {
-  String json = "{\"humidity\": \"" + String(humidity) + "\", ";
-  json = json + "\"temp\": \"" + String(tempf) + "\", ";
+  tempHumidUpdate();
+  barometerUpdate();
+
+  String json = "{\"humidity\": " + String(humidity) + ", ";
+  json = json + "\"temp\": " + String(tempf) + ", ";
   if (barometerConnected) {
     json = json + "\"indoors\": false, ";
-    json = json + "\"relative_pressure\": " + String(pressure_relative) +"\"";
+    json = json + "\"relative_pressure\": " + String(pressure_relative);
   }
   else {
     json = json + "\"indoors\": true";
