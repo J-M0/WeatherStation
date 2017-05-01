@@ -1,8 +1,6 @@
 #include <ESP8266WiFi.h>
 #include <WiFiClient.h>
-
-const char* ssid = "";
-const char* pass = "";
+#include "WiFiCreds.h"
 
 void startWiFi() {
   // Initialize WiFi connection
@@ -17,4 +15,3 @@ void startWiFi() {
   Serial.print("Connected, IP address: ");
   Serial.println(WiFi.localIP());
 }
-
