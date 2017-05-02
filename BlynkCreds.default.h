@@ -7,7 +7,7 @@
 #define OUTDOOR_AUTH ""
 
 #if INDOOR
-const char BLYNK_AUTH[] = INDOOR_AUTH;
+#define BLYNK_AUTH INDOOR_AUTH
 #else
-const char BLYNK_AUTH[] = OUTDOOR_AUTH;
+#define BLYNK_AUTH OUTDOOR_AUTH
 #endif
