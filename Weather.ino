@@ -10,6 +10,12 @@ float humidity = 0;
 float tempf = 0;
 Weather tempHumidSensor;
 
+#if INDOOR
+float outside_humidity = 0;
+float outside_tempf = 0;
+float outside_pressure = 0;
+#endif
+
 /* Barometer Variables */
 // Barometer code reused from example https://github.com/sparkfun/SparkFun_T5403_Barometric_Sensor_Arduino_Library/blob/master/examples/SparkFun_T5403_example/SparkFun_T5403_example.ino
 bool barometerConnected = false;
@@ -20,13 +26,19 @@ double base_altitude = 62; //Altitude in meters
 
 void sendWeatherInfo() {
   tempHumidUpdate();
-  Blynk.virtualWrite(V0, tempf);
-  Blynk.virtualWrite(V1, tempf);
 
-	if(barometerConnected) {
-    barometerUpdate();
-    Blynk.virtualWrite(V2, pressure_relative);
-	}
+	#if OUTDOOR
+  barometerUpdate();
+  bridge.virtualWrite(V10, tempf);
+  bridge.virtualWrite(V11, humidity);
+  bridge.virtualWrite(V12, pressure_relative);
+	#else
+  Blynk.virtualWrite(V0, tempf);
+  Blynk.virtualWrite(V1, outside_tempf);
+  Blynk.virtualWrite(V2, humidity);
+  Blynk.virtualWrite(V3, outside_humidity);
+  Blynk.virtualWrite(V4, outside_pressure);
+	#endif
 }
 
 void startWeather() {
@@ -85,12 +97,12 @@ void tempHumidUpdate() {
 void barometerUpdate() {
   // Read temperature from the sensor in deg C. This operation takes about
   // 4.5ms to complete.
-  bar_temperature_c = barometer.getTemperature(CELSIUS);
+//  bar_temperature_c = barometer.getTemperature(CELSIUS);
 
   // Read temperature from the sensor in deg F. This operation takes about
   // 4.5ms to complete. Converting to Fahrenheit is not internal to the sensor.
   // Additional math is done to convert a Celsius reading.
-  bar_temperature_f = barometer.getTemperature(FAHRENHEIT);
+//  bar_temperature_f = barometer.getTemperature(FAHRENHEIT);
 
   // Read pressure from the sensor in Pa. This operation takes about
   // 67ms to complete in ULTRA_MODE.  Other Modes are available for faster, yet
@@ -153,3 +165,18 @@ double sealevel(double P, double A) {
 double altitude(double P, double P0) {
   return(44330.0*(1-pow(P/P0,1/5.255)));
 }
+
+#if INDOOR
+BLYNK_WRITE(V10) {
+  outside_tempf = param.asFloat();
+}
+
+BLYNK_WRITE(V11) {
+  outside_humidity = param.asFloat();
+}
+
+BLYNK_WRITE(V12) {
+  outside_pressure = param.asFloat();
+}
+#endif
+

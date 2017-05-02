@@ -7,6 +7,10 @@
 
 SimpleTimer timer;
 
+#if OUTDOOR
+WidgetBridge bridge(V0);
+#endif
+
 void setup() {
   Serial.begin(9600);
   startWiFi();
@@ -21,3 +25,10 @@ void loop() {
   Blynk.run();
   timer.run();
 }
+
+#if OUTDOOR
+BLYNK_CONNECTED() {
+  bridge.setAuthToken(INDOOR_AUTH);
+}
+#endif
+
