@@ -3,4 +3,3 @@
 const char* G_REFRESH_TOKEN = "";
 const char* G_CLIENT_SECRET = "";
 const char* G_CLIENT_ID = "";
-const char* G_CLIENT_ID = "";
