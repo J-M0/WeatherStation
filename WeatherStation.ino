@@ -17,8 +17,8 @@ void setup() {
   Blynk.config(BLYNK_AUTH);
   startWeather();
 //  timer.setInterval(10 * 1000, printWeatherJSON);
-//  timer.setInterval(10 * 1000, sendWeatherInfo);
-  timer.setInterval(10 * 1000, logWeather);
+  timer.setInterval(10 * 1000, sendWeatherInfo);
+//  timer.setInterval(10 * 1000, logWeather);
 }
 
 void loop() {
