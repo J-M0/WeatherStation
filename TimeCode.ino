@@ -8,7 +8,7 @@ WiFiUDP Udp;
 // NTP Servers:
 #define ntpServerName "us.pool.ntp.org"
 
-//const int timeZone = -5;  // Eastern Standard Time (USA)
+//#define timeZone -5  // Eastern Standard Time (USA)
 #define timeZone -4  // Eastern Daylight Time (USA)
 
 #define NTP_PACKET_SIZE 48 // NTP time is in the first 48 bytes of message
