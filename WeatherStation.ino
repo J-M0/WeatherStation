@@ -13,7 +13,7 @@ WidgetBridge bridge(V0);
 void setup() {
   Serial.begin(9600);
   startWiFi();
-//  startNTP();
+  startNTP();
   Blynk.config(BLYNK_AUTH);
   startWeather();
 //  timer.setInterval(10 * 1000, printWeatherJSON);
