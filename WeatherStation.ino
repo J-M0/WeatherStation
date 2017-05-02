@@ -13,17 +13,22 @@ WidgetBridge bridge(V0);
 void setup() {
   Serial.begin(9600);
   startWiFi();
-  startNTP();
+//  startNTP();
   Blynk.config(BLYNK_AUTH);
   startWeather();
-  timer.setInterval(10 * 1000, printWeatherJSON);
-  timer.setInterval(10 * 1000, sendWeatherInfo);
-//  timer.setInterval(10 * 1000, logWeather);
+//  timer.setInterval(10 * 1000, printWeatherJSON);
+//  timer.setInterval(10 * 1000, sendWeatherInfo);
+  timer.setInterval(10 * 1000, logWeather);
 }
 
 void loop() {
   Blynk.run();
   timer.run();
+//  printWeatherJSON();
+//  logWeather();
+//  Serial.println("Wating...");
+//  delay(10*1000);
+  
 }
 
 #if OUTDOOR

@@ -86,6 +86,9 @@ void printWeatherJSON() {
 }
 
 void logWeather() {
+  String weather = getWeatherJSON();
+  Serial.println(weather);
+  Serial.println("Making Choreo");
   TembooChoreo AppendValuesChoreo(client);
   AppendValuesChoreo.begin();
 
@@ -94,11 +97,12 @@ void logWeather() {
   AppendValuesChoreo.setAppKey(TEMBOO_APP_KEY);
 
   AppendValuesChoreo.setProfile("WeatherLog");
-  AppendValuesChoreo.addInput("Values", getWeatherJSON());
+  AppendValuesChoreo.addInput("Values", weather);
 
 
   AppendValuesChoreo.setChoreo("/Library/Google/Sheets/AppendValues");
 
+  Serial.println("Running Choreo");
   int result = AppendValuesChoreo.run();
   Serial.println("Temboo result: " + String(result));
 
