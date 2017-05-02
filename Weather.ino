@@ -69,9 +69,9 @@ String getWeatherJSON() {
   tempHumidUpdate();
   barometerUpdate();
 
-  String json = "[[\"" + getCurrentTime() + "\", \"" + String(tempf) + "\", \"" + String(humidity) + "\"";
+  String json = "[[\"" + getCurrentTime() + "\", " + String(tempf) + ", " + String(humidity) + "";
   if (barometerConnected) {
-    json = json + ", \"" + String(pressure_relative) + "\"";
+    json = json + ", " + String(pressure_relative);
   }
 
   json = json + "]]";
