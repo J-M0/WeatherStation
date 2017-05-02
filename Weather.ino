@@ -100,6 +100,7 @@ void logWeather() {
   AppendValuesChoreo.setChoreo("/Library/Google/Sheets/AppendValues");
 
   Serial.println("Running Choreo");
+  tembooWorking = true;
   int result = AppendValuesChoreo.run();
   Serial.println("Temboo result: " + String(result));
 
@@ -109,6 +110,7 @@ void logWeather() {
   }
 
   AppendValuesChoreo.close();
+  tembooWorking = false;
 }
 
 void tempHumidUpdate() {
