@@ -16,19 +16,13 @@ void setup() {
   startNTP();
   Blynk.config(BLYNK_AUTH);
   startWeather();
-//  timer.setInterval(10 * 1000, printWeatherJSON);
+
   timer.setInterval(10 * 1000, sendWeatherInfo);
-//  timer.setInterval(10 * 1000, logWeather);
 }
 
 void loop() {
   Blynk.run();
-  timer.run();
-//  printWeatherJSON();
-//  logWeather();
-//  Serial.println("Wating...");
-//  delay(10*1000);
-  
+  timer.run();  
 }
 
 #if OUTDOOR

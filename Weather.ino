@@ -58,14 +58,11 @@ void startWeather() {
     // Grab a baseline pressure for delta altitude calculation.
     pressure_baseline = barometer.getPressure(MODE_ULTRA);
     barometerUpdate();
-//    timer.setInterval(polling_interval * 1000, barometerUpdate);
   }
 
   //Setup temperature and humidity sensor
   tempHumidSensor.begin();
   tempHumidUpdate();
-//  timer.setInterval(polling_interval * 1000, tempHumidUpdate);
-
 }
 
 String getWeatherJSON() {
@@ -117,25 +114,9 @@ void logWeather() {
 void tempHumidUpdate() {
   humidity = tempHumidSensor.getRH();
   tempf = tempHumidSensor.getTempF();
-//  Serial.print("Si7021 temp: ");
-//  Serial.print(tempf);
-//  Serial.print("F, ");
-//
-//  Serial.print("humidity: ");
-//  Serial.print(humidity);
-//  Serial.println("%");
 }
 
 void barometerUpdate() {
-  // Read temperature from the sensor in deg C. This operation takes about
-  // 4.5ms to complete.
-//  bar_temperature_c = barometer.getTemperature(CELSIUS);
-
-  // Read temperature from the sensor in deg F. This operation takes about
-  // 4.5ms to complete. Converting to Fahrenheit is not internal to the sensor.
-  // Additional math is done to convert a Celsius reading.
-//  bar_temperature_f = barometer.getTemperature(FAHRENHEIT);
-
   // Read pressure from the sensor in Pa. This operation takes about
   // 67ms to complete in ULTRA_MODE.  Other Modes are available for faster, yet
   // less precise measurements.
@@ -149,26 +130,6 @@ void barometerUpdate() {
   // Convert abs pressure with the help of altitude into relative pressure
   // This is used in Weather stations.
   pressure_relative = sealevel(pressure_abs, base_altitude);
-
-//  // Taking our baseline pressure at the beginning we can find an approximate
-//  // change in altitude based on the differences in pressure.
-//  altitude_delta = altitude(pressure_abs , pressure_baseline);
-//
-//  // Report values via UART
-//  Serial.print("Temperature C = ");
-//  Serial.println(bar_temperature_c / 100);
-//
-//  Serial.print("Temperature F = ");
-//  Serial.println(bar_temperature_f / 100);
-//
-//  Serial.print("Pressure abs (Pa)= ");
-//  Serial.println(pressure_abs);
-//
-//  Serial.print("Pressure relative (hPa)= ");
-//  Serial.println(pressure_relative);
-//
-//  Serial.print("Altitude change (m) = ");
-//  Serial.println(altitude_delta);
 }
 
 void checkForBarometer() {
