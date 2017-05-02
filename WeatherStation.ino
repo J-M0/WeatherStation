@@ -9,12 +9,12 @@ SimpleTimer timer;
 
 void setup() {
   Serial.begin(9600);
-//  startWiFi();
+  startWiFi();
 //  startNTP();
-//  Blynk.config(BLYNK_AUTH);
+  Blynk.config(BLYNK_AUTH);
   startWeather();
   timer.setInterval(10 * 1000, printWeatherJSON);
-//  timer.setInterval(10 * 1000, sendWeatherInfo);
+  timer.setInterval(10 * 1000, sendWeatherInfo);
 }
 
 void loop() {

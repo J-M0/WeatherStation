@@ -19,13 +19,13 @@ double pressure_abs, pressure_relative, altitude_delta, pressure_baseline;
 double base_altitude = 62; //Altitude in meters
 
 void sendWeatherInfo() {
+  tempHumidUpdate();
+  Blynk.virtualWrite(V0, tempf);
+  Blynk.virtualWrite(V1, tempf);
+
 	if(barometerConnected) {
-		Blynk.virtualWrite(V0, tempf);
-    Blynk.virtualWrite(V2, humidity);
-    Blynk.virtualWrite(V4, pressure_relative);
-	} else {
-    Blynk.virtualWrite(V1, tempf);
-    Blynk.virtualWrite(V3, humidity);
+    barometerUpdate();
+    Blynk.virtualWrite(V2, pressure_relative);
 	}
 }
 
