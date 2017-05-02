@@ -1,10 +1,15 @@
 #include <Wire.h>
 #include <SparkFunT5403.h>
+#include <WiFiClient.h>
+#include <Temboo.h>
+#include "TembooAccount.h"
 
 /* Si7021 Humidity and Temperature Sensor */
 // https://github.com/sparkfun/Si7021_Breakout/tree/master/Libraries/Arduino/Si7021
 
-const int polling_interval = 10; //Seconds to wait between polling
+WiFiClient client;
+
+#define polling_interval 10 //Seconds to wait between polling
 
 float humidity = 0;
 float tempf = 0;
@@ -39,6 +44,8 @@ void sendWeatherInfo() {
   Blynk.virtualWrite(V3, outside_humidity);
   Blynk.virtualWrite(V4, outside_pressure);
 	#endif
+
+  logWeather();
 }
 
 void startWeather() {
@@ -65,21 +72,42 @@ String getWeatherJSON() {
   tempHumidUpdate();
   barometerUpdate();
 
-  String json = "{\"humidity\": " + String(humidity) + ", ";
-  json = json + "\"temp\": " + String(tempf) + ", ";
+  String json = "[[\"" + getCurrentTime() + "\", \"" + String(tempf) + "\", \"" + String(humidity) + "\"";
   if (barometerConnected) {
-    json = json + "\"indoors\": false, ";
-    json = json + "\"relative_pressure\": " + String(pressure_relative);
+    json = json + ", \"" + String(pressure_relative) + "\"";
   }
-  else {
-    json = json + "\"indoors\": true";
-  }
-  json = json + "}";
+
+  json = json + "]]";
   return json;
 }
 
 void printWeatherJSON() {
   Serial.println(getWeatherJSON());
+}
+
+void logWeather() {
+  TembooChoreo AppendValuesChoreo(client);
+  AppendValuesChoreo.begin();
+
+  AppendValuesChoreo.setAccountName(TEMBOO_ACCOUNT);
+  AppendValuesChoreo.setAppKeyName(TEMBOO_APP_KEY_NAME);
+  AppendValuesChoreo.setAppKey(TEMBOO_APP_KEY);
+
+  AppendValuesChoreo.setProfile("WeatherLog");
+  AppendValuesChoreo.addInput("Values", getWeatherJSON());
+
+
+  AppendValuesChoreo.setChoreo("/Library/Google/Sheets/AppendValues");
+
+  int result = AppendValuesChoreo.run();
+  Serial.println("Temboo result: " + String(result));
+
+  while(AppendValuesChoreo.available()) {
+    char c = AppendValuesChoreo.read();
+    Serial.print(c);
+  }
+
+  AppendValuesChoreo.close();
 }
 
 void tempHumidUpdate() {

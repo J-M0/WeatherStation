@@ -1,4 +1,3 @@
-#include <Temboo.h>
 #include <BlynkSimpleEsp8266.h>
 #include "BlynkCreds.h"
 #include "SparkFun_Si7021_Breakout_Library.h"
@@ -14,11 +13,12 @@ WidgetBridge bridge(V0);
 void setup() {
   Serial.begin(9600);
   startWiFi();
-//  startNTP();
+  startNTP();
   Blynk.config(BLYNK_AUTH);
   startWeather();
   timer.setInterval(10 * 1000, printWeatherJSON);
   timer.setInterval(10 * 1000, sendWeatherInfo);
+//  timer.setInterval(10 * 1000, logWeather);
 }
 
 void loop() {
